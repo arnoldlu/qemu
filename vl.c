@@ -130,6 +130,17 @@ int main(int argc, char **argv)
 #define MAX_VIRTIO_CONSOLES 1
 #define MAX_SCLP_CONSOLES 1
 
+#define DEBUG_KVM
+
+#ifdef DEBUG_KVM
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
+
 static const char *data_dir[16];
 static int data_dir_idx;
 const char *bios_name = NULL;
@@ -1869,6 +1880,7 @@ static void main_loop(void)
 #ifdef CONFIG_PROFILER
     int64_t ti;
 #endif
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     do {
         nonblocking = tcg_enabled() && last_io > 0;
 #ifdef CONFIG_PROFILER
@@ -2954,6 +2966,8 @@ int main(int argc, char **argv, char **envp)
     Error *main_loop_err = NULL;
     Error *err = NULL;
     bool list_data_dirs = false;
+
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     module_call_init(MODULE_INIT_TRACE);
 
