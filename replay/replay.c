@@ -24,6 +24,15 @@
 #define REPLAY_VERSION              0xe02005
 /* Size of replay log header */
 #define HEADER_SIZE                 (sizeof(uint32_t) + sizeof(uint64_t))
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 ReplayMode replay_mode = REPLAY_MODE_NONE;
 char *replay_snapshot;
@@ -303,6 +312,7 @@ out:
 
 void replay_start(void)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (replay_mode == REPLAY_MODE_NONE) {
         return;
     }

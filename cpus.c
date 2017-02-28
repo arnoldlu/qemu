@@ -82,6 +82,15 @@ static unsigned int throttle_percentage;
 #define CPU_THROTTLE_PCT_MAX 99
 #define CPU_THROTTLE_TIMESLICE_NS 10000000
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 bool cpu_is_stopped(CPUState *cpu)
 {
     return cpu->stopped || !runstate_is_running();
@@ -975,6 +984,7 @@ static void *qemu_kvm_cpu_thread_fn(void *arg)
     CPUState *cpu = arg;
     int r;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     rcu_register_thread();
 
     qemu_mutex_lock_iothread();
@@ -1497,6 +1507,7 @@ static void qemu_kvm_start_vcpu(CPUState *cpu)
 {
     char thread_name[VCPU_THREAD_NAME_SIZE];
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     cpu->thread = g_malloc0(sizeof(QemuThread));
     cpu->halt_cond = g_malloc0(sizeof(QemuCond));
     qemu_cond_init(cpu->halt_cond);
@@ -1531,6 +1542,7 @@ void qemu_init_vcpu(CPUState *cpu)
     cpu->nr_threads = smp_threads;
     cpu->stopped = true;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (!cpu->as) {
         /* If the target cpu hasn't set up any address spaces itself,
          * give it the default one.

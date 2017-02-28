@@ -56,6 +56,14 @@
 #include "kvm_i386.h"
 
 #define MAX_IDE_BUS 2
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 static const int ide_iobase[MAX_IDE_BUS] = { 0x1f0, 0x170 };
 static const int ide_iobase2[MAX_IDE_BUS] = { 0x3f6, 0x376 };
@@ -116,6 +124,7 @@ static void pc_init1(MachineState *machine,
      *    qemu -M pc,max-ram-below-4g=2G -m 4G     -> 2048M low, 2048M high
      *    qemu -M pc,max-ram-below-4g=4G -m 3968M  -> 3968M low (=4G-128M)
      */
+		DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (xen_enabled()) {
         xen_hvm_init(pcms, &ram_memory);
     } else {
@@ -379,6 +388,7 @@ static void pc_compat_0_13(MachineState *machine)
 
 static void pc_init_isa(MachineState *machine)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (!machine->cpu_model) {
         machine->cpu_model = "486";
     }
@@ -393,6 +403,7 @@ static void pc_xen_hvm_init_pci(MachineState *machine)
     const char *pci_type = has_igd_gfx_passthru ?
                 TYPE_IGD_PASSTHROUGH_I440FX_PCI_DEVICE : TYPE_I440FX_PCI_DEVICE;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     pc_init1(machine,
              TYPE_I440FX_PCI_HOST_BRIDGE,
              pci_type);

@@ -42,6 +42,15 @@
 #ifdef CONFIG_LINUX
 #include <sys/prctl.h>
 #endif
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 static struct passwd *user_pwd;
 static const char *chroot_dir;
@@ -59,6 +68,7 @@ void os_setup_early_signal_handling(void)
 
 static void termsig_handler(int signal, siginfo_t *info, void *c)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     qemu_system_killed(info->si_signo, info->si_pid);
 }
 
@@ -66,6 +76,7 @@ void os_setup_signal_handling(void)
 {
     struct sigaction act;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     memset(&act, 0, sizeof(act));
     act.sa_sigaction = termsig_handler;
     act.sa_flags = SA_SIGINFO;
@@ -205,6 +216,7 @@ static void change_root(void)
 
 void os_daemonize(void)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (daemonize) {
         pid_t pid;
         int fds[2];
@@ -257,6 +269,7 @@ void os_setup_post(void)
 {
     int fd = 0;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (daemonize) {
         if (chdir("/")) {
             perror("not able to chdir to /");

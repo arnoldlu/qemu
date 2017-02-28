@@ -22,6 +22,16 @@
 #include "qemu/error-report.h"
 #include "qemu/rcu.h"
 #include "qemu/main-loop.h"
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 
 typedef ObjectClass IOThreadClass;
 
@@ -294,6 +304,7 @@ void iothread_stop_all(void)
     BlockDriverState *bs;
     BdrvNextIterator it;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     for (bs = bdrv_first(&it); bs; bs = bdrv_next(&it)) {
         AioContext *ctx = bdrv_get_aio_context(bs);
         if (ctx == qemu_get_aio_context()) {

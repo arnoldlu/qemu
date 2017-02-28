@@ -716,6 +716,7 @@ int kvm_arch_init_vcpu(CPUState *cs)
 
     cpuid_i = 0;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     /* Paravirtualization CPUIDs */
     if (hyperv_enabled(cpu)) {
         c = &cpuid_data.entries[cpuid_i++];

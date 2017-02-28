@@ -64,6 +64,15 @@
 #endif
 
 //#define DEBUG_SUBPAGE
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 #if !defined(CONFIG_USER_ONLY)
 /* ram_list is read under rcu_read_lock()/rcu_read_unlock().  Writes
@@ -2919,6 +2928,7 @@ void cpu_register_map_client(QEMUBH *bh)
 
 void cpu_exec_init_all(void)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     qemu_mutex_init(&ram_list.mutex);
     /* The data structures we set up here depend on knowing the page size,
      * so no more changes can be made after this point.

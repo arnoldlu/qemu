@@ -53,6 +53,15 @@ static int max_numa_nodeid; /* Highest specified NUMA node ID, plus one.
 int nb_numa_nodes;
 NodeInfo numa_info[MAX_NODES];
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 void numa_set_mem_node_id(ram_addr_t addr, uint64_t size, uint32_t node)
 {
     struct numa_addr_range *range;
@@ -298,6 +307,7 @@ void parse_numa_opts(MachineClass *mc)
 {
     int i;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     for (i = 0; i < MAX_NODES; i++) {
         numa_info[i].node_cpu = bitmap_new(max_cpus);
     }

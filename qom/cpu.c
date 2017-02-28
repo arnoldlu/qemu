@@ -30,6 +30,14 @@
 #include "sysemu/sysemu.h"
 #include "hw/qdev-properties.h"
 #include "trace-root.h"
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 bool cpu_exists(int64_t id)
 {
@@ -53,6 +61,7 @@ CPUState *cpu_generic_init(const char *typename, const char *cpu_model)
     CPUClass *cc;
     Error *err = NULL;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     str = g_strdup(cpu_model);
     name = strtok(str, ",");
 
@@ -301,6 +310,7 @@ ObjectClass *cpu_class_by_name(const char *typename, const char *cpu_model)
 {
     CPUClass *cc = CPU_CLASS(object_class_by_name(typename));
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     return cc->class_by_name(cpu_model);
 }
 

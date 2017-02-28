@@ -65,6 +65,7 @@ static int accel_init_machine(AccelClass *acc, MachineState *ms)
     const char *cname = object_class_get_name(oc);
     AccelState *accel = ACCEL(object_new(cname));
     int ret;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     ms->accelerator = accel;
     *(acc->allowed) = true;
     ret = acc->init_machine(ms);
@@ -85,6 +86,7 @@ void configure_accelerator(MachineState *ms)
     bool init_failed = false;
     AccelClass *acc = NULL;
 
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     p = qemu_opt_get(qemu_get_machine_opts(), "accel");
     if (p == NULL) {
         /* Use the default "accelerator", tcg */
@@ -132,6 +134,7 @@ void configure_accelerator(MachineState *ms)
 
 static void tcg_accel_class_init(ObjectClass *oc, void *data)
 {
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     AccelClass *ac = ACCEL_CLASS(oc);
     ac->name = "tcg";
     ac->init_machine = tcg_init;
@@ -148,6 +151,7 @@ static const TypeInfo tcg_accel_type = {
 
 static void register_accel_types(void)
 {
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     type_register_static(&accel_type);
     type_register_static(&tcg_accel_type);
 }

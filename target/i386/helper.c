@@ -29,6 +29,15 @@
 #include "hw/i386/apic_internal.h"
 #endif
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 static void cpu_x86_version(CPUX86State *env, int *family, int *model)
 {
     int cpuver = env->cpuid_version;
@@ -1375,6 +1384,7 @@ void x86_cpu_exec_enter(CPUState *cs)
 {
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     CC_SRC = env->eflags & (CC_O | CC_S | CC_Z | CC_A | CC_P | CC_C);
     env->df = 1 - (2 * ((env->eflags >> 10) & 1));
@@ -1387,6 +1397,7 @@ void x86_cpu_exec_exit(CPUState *cs)
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     env->eflags = cpu_compute_eflags(env);
 }
 

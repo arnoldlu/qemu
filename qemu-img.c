@@ -43,6 +43,15 @@
 #include "trace/control.h"
 #include <getopt.h>
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 #define QEMU_IMG_VERSION "qemu-img version " QEMU_VERSION QEMU_PKGVERSION \
                           "\n" QEMU_COPYRIGHT "\n"
 
@@ -219,6 +228,7 @@ static int print_block_option_help(const char *filename, const char *fmt)
     QemuOptsList *create_opts = NULL;
     Error *local_err = NULL;
 
+	DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     /* Find driver and parse its options */
     drv = bdrv_find_format(fmt);
     if (!drv) {
@@ -1784,6 +1794,7 @@ static int img_convert(int argc, char **argv)
     ImgConvertState state;
     bool image_opts = false;
 
+	DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     fmt = NULL;
     out_fmt = "raw";
     cache = "unsafe";
@@ -3941,6 +3952,7 @@ static int img_dd(int argc, char **argv)
         .offset = 0
     };
 
+	DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     const struct DdOpts options[] = {
         { "bs", img_dd_bs, C_BS },
         { "count", img_dd_count, C_COUNT },

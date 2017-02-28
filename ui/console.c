@@ -31,6 +31,16 @@
 #include "trace.h"
 #include "exec/memory.h"
 
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 #define DEFAULT_BACKSCROLL 512
 #define CONSOLE_CURSOR_PERIOD 500
 
@@ -1777,6 +1787,7 @@ DisplayState *init_displaystate(void)
     gchar *name;
     int i;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     get_alloc_displaystate();
     for (i = 0; i < nb_consoles; i++) {
         if (consoles[i]->console_type != GRAPHIC_CONSOLE &&

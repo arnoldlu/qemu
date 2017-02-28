@@ -15,6 +15,14 @@
 #include "cpu.h"
 #include "exec/cpu-all.h"
 #include "sysemu/memory_mapping.h"
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 /* PAE Paging or IA-32e Paging */
 static void walk_pte(MemoryMappingList *list, AddressSpace *as,
@@ -273,6 +281,7 @@ void x86_cpu_get_memory_mapping(CPUState *cs, MemoryMappingList *list,
     X86CPU *cpu = X86_CPU(cs);
     CPUX86State *env = &cpu->env;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (!cpu_paging_enabled(cs)) {
         /* paging is disabled */
         return;

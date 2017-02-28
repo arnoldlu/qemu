@@ -1115,6 +1115,7 @@ void pc_hot_add_cpu(const int64_t id, Error **errp)
     int64_t apic_id = x86_cpu_apic_id_from_index(id);
     Error *local_err = NULL;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (id < 0) {
         error_setg(errp, "Invalid CPU id: %" PRIi64, id);
         return;
@@ -1987,6 +1988,7 @@ static void pc_cpu_pre_plug(HotplugHandler *hotplug_dev,
 static void pc_machine_device_pre_plug_cb(HotplugHandler *hotplug_dev,
                                           DeviceState *dev, Error **errp)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (object_dynamic_cast(OBJECT(dev), TYPE_CPU)) {
         pc_cpu_pre_plug(hotplug_dev, dev, errp);
     }
@@ -1995,6 +1997,7 @@ static void pc_machine_device_pre_plug_cb(HotplugHandler *hotplug_dev,
 static void pc_machine_device_plug_cb(HotplugHandler *hotplug_dev,
                                       DeviceState *dev, Error **errp)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (object_dynamic_cast(OBJECT(dev), TYPE_PC_DIMM)) {
         pc_dimm_plug(hotplug_dev, dev, errp);
     } else if (object_dynamic_cast(OBJECT(dev), TYPE_CPU)) {
@@ -2005,6 +2008,7 @@ static void pc_machine_device_plug_cb(HotplugHandler *hotplug_dev,
 static void pc_machine_device_unplug_request_cb(HotplugHandler *hotplug_dev,
                                                 DeviceState *dev, Error **errp)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (object_dynamic_cast(OBJECT(dev), TYPE_PC_DIMM)) {
         pc_dimm_unplug_request(hotplug_dev, dev, errp);
     } else if (object_dynamic_cast(OBJECT(dev), TYPE_CPU)) {
@@ -2018,6 +2022,7 @@ static void pc_machine_device_unplug_request_cb(HotplugHandler *hotplug_dev,
 static void pc_machine_device_unplug_cb(HotplugHandler *hotplug_dev,
                                         DeviceState *dev, Error **errp)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (object_dynamic_cast(OBJECT(dev), TYPE_PC_DIMM)) {
         pc_dimm_unplug(hotplug_dev, dev, errp);
     } else if (object_dynamic_cast(OBJECT(dev), TYPE_CPU)) {
@@ -2033,6 +2038,7 @@ static HotplugHandler *pc_get_hotpug_handler(MachineState *machine,
 {
     PCMachineClass *pcmc = PC_MACHINE_GET_CLASS(machine);
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (object_dynamic_cast(OBJECT(dev), TYPE_PC_DIMM) ||
         object_dynamic_cast(OBJECT(dev), TYPE_CPU)) {
         return HOTPLUG_HANDLER(machine);
@@ -2229,6 +2235,7 @@ static void pc_machine_reset(void)
     CPUState *cs;
     X86CPU *cpu;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     qemu_devices_reset();
 
     /* Reset APIC after devices have been reset to cancel

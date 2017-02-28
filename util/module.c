@@ -21,6 +21,15 @@
 #include "qemu/queue.h"
 #include "qemu/module.h"
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 typedef struct ModuleEntry
 {
     void (*init)(void);
@@ -65,6 +74,7 @@ void register_module_init(void (*fn)(void), module_init_type type)
     ModuleEntry *e;
     ModuleTypeList *l;
 
+    //DPRINTF("File: %s %s line=%d %pf type=%d\n", __FILE__, __func__, __LINE__, fn, type);
     e = g_malloc0(sizeof(*e));
     e->init = fn;
     e->type = type;
@@ -78,6 +88,7 @@ void register_dso_module_init(void (*fn)(void), module_init_type type)
 {
     ModuleEntry *e;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     init_lists();
 
     e = g_malloc0(sizeof(*e));
@@ -110,6 +121,7 @@ static int module_load_file(const char *fname)
     ModuleEntry *e, *next;
     int ret;
 
+    DPRINTF("File: %s %s line=%d fname=%d\n", __FILE__, __func__, __LINE__, fname);
     if (len <= suf_len || strcmp(&fname[len - suf_len], dsosuf)) {
         /* wrong suffix */
         ret = -EINVAL;
@@ -168,6 +180,7 @@ void module_load_one(const char *prefix, const char *lib_name)
     int ret;
     static GHashTable *loaded_modules;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (!g_module_supported()) {
         fprintf(stderr, "Module is not supported by system.\n");
         return;

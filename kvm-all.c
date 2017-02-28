@@ -305,7 +305,7 @@ int kvm_init_vcpu(CPUState *cpu)
     long mmap_size;
     int ret;
 
-    DPRINTF("kvm_init_vcpu\n");
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     ret = kvm_get_vcpu(s, kvm_arch_vcpu_id(cpu));
     if (ret < 0) {
@@ -507,6 +507,7 @@ static void kvm_coalesce_mmio_region(MemoryListener *listener,
                                      hwaddr start, hwaddr size)
 {
     KVMState *s = kvm_state;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     if (s->coalesced_mmio) {
         struct kvm_coalesced_mmio_zone zone;
@@ -524,6 +525,7 @@ static void kvm_uncoalesce_mmio_region(MemoryListener *listener,
                                        hwaddr start, hwaddr size)
 {
     KVMState *s = kvm_state;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     if (s->coalesced_mmio) {
         struct kvm_coalesced_mmio_zone zone;
@@ -888,6 +890,7 @@ static void kvm_mem_ioeventfd_add(MemoryListener *listener,
 {
     int fd = event_notifier_get_fd(e);
     int r;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     r = kvm_set_ioeventfd_mmio(fd, section->offset_within_address_space,
                                data, true, int128_get64(section->size),
@@ -906,6 +909,7 @@ static void kvm_mem_ioeventfd_del(MemoryListener *listener,
 {
     int fd = event_notifier_get_fd(e);
     int r;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     r = kvm_set_ioeventfd_mmio(fd, section->offset_within_address_space,
                                data, false, int128_get64(section->size),
@@ -922,6 +926,7 @@ static void kvm_io_ioeventfd_add(MemoryListener *listener,
 {
     int fd = event_notifier_get_fd(e);
     int r;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     r = kvm_set_ioeventfd_pio(fd, section->offset_within_address_space,
                               data, true, int128_get64(section->size),
@@ -941,6 +946,7 @@ static void kvm_io_ioeventfd_del(MemoryListener *listener,
 {
     int fd = event_notifier_get_fd(e);
     int r;
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     r = kvm_set_ioeventfd_pio(fd, section->offset_within_address_space,
                               data, false, int128_get64(section->size),
@@ -1580,6 +1586,7 @@ static int kvm_init(MachineState *ms)
     int type = 0;
     const char *kvm_type;
 
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     s = KVM_STATE(ms->accelerator);
 
     /*
@@ -2467,6 +2474,7 @@ int kvm_get_one_reg(CPUState *cs, uint64_t id, void *target)
 
 static void kvm_accel_class_init(ObjectClass *oc, void *data)
 {
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     AccelClass *ac = ACCEL_CLASS(oc);
     ac->name = "KVM";
     ac->init_machine = kvm_init;
@@ -2482,6 +2490,7 @@ static const TypeInfo kvm_accel_type = {
 
 static void kvm_type_init(void)
 {
+	fprintf(stderr, "File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     type_register_static(&kvm_accel_type);
 }
 

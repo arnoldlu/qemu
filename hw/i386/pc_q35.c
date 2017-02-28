@@ -50,6 +50,14 @@
 
 /* ICH9 AHCI has 6 ports */
 #define MAX_SATA_PORTS     6
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 /* PC hardware initialisation */
 static void pc_q35_init(MachineState *machine)
@@ -77,6 +85,7 @@ static void pc_q35_init(MachineState *machine)
     DriveInfo *hd[MAX_SATA_PORTS];
     MachineClass *mc = MACHINE_GET_CLASS(machine);
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     /* Check whether RAM fits below 4G (leaving 1/2 GByte for IO memory
      * and 256 Mbytes for PCI Express Enhanced Configuration Access Mapping
      * also known as MMCFG).

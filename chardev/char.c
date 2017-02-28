@@ -38,6 +38,15 @@
 #include "char-io.h"
 #include "char-parallel.h"
 #include "char-serial.h"
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 /***********************************************************/
 /* character device */
@@ -1316,6 +1325,7 @@ void qemu_chr_cleanup(void)
 {
     Chardev *chr, *tmp;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     QTAILQ_FOREACH_SAFE(chr, &chardevs, next, tmp) {
         qemu_chr_delete(chr);
     }

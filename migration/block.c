@@ -972,6 +972,7 @@ static SaveVMHandlers savevm_block_handlers = {
 
 void blk_mig_init(void)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     QSIMPLEQ_INIT(&block_mig_state.bmds_list);
     QSIMPLEQ_INIT(&block_mig_state.blk_list);
     qemu_mutex_init(&block_mig_state.lock);

@@ -89,6 +89,15 @@
         }                                       \
     } while (0)
 #endif
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 
 #define SMC_BITMAP_USE_THRESHOLD 10
 
@@ -385,6 +394,7 @@ void page_size_init(void)
 {
     /* NOTE: we can always suppose that qemu_host_page_size >=
        TARGET_PAGE_SIZE */
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     qemu_real_host_page_size = getpagesize();
     qemu_real_host_page_mask = -(intptr_t)qemu_real_host_page_size;
     if (qemu_host_page_size == 0) {

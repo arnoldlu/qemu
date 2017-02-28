@@ -56,6 +56,15 @@
 #include <windows.h>
 #endif
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 #define NOT_DONE 0x7fffffff /* used while emulated sync operation in progress */
 
 static QTAILQ_HEAD(, BlockDriverState) graph_bdrv_states =
@@ -384,6 +393,7 @@ int bdrv_create_file(const char *filename, QemuOpts *opts, Error **errp)
     Error *local_err = NULL;
     int ret;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     drv = bdrv_find_protocol(filename, true, errp);
     if (drv == NULL) {
         return -ENOENT;
@@ -518,6 +528,7 @@ BlockDriver *bdrv_find_protocol(const char *filename,
      * Thanks to the brain-dead persistent naming schemes on udev-
      * based Linux systems those actually are quite common.
      */
+		DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     drv1 = find_hdev_driver(filename);
     if (drv1) {
         return drv1;
@@ -1220,6 +1231,7 @@ static int bdrv_fill_options(QDict **options, const char *filename,
     BlockDriver *drv = NULL;
     Error *local_err = NULL;
 
+	DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     drvname = qdict_get_try_str(*options, "driver");
     if (drvname) {
         drv = bdrv_find_format(drvname);
@@ -3523,6 +3535,7 @@ void bdrv_img_create(const char *filename, const char *fmt,
     int ret = 0;
 
     /* Find driver and parse its options */
+	DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     drv = bdrv_find_format(fmt);
     if (!drv) {
         error_setg(errp, "Unknown file format '%s'", fmt);

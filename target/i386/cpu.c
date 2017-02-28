@@ -49,6 +49,15 @@
 #include "hw/i386/apic_internal.h"
 #endif
 
+#define DEBUG_ENABLE
+#ifdef DEBUG_ENABLE
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
+
 
 /* Cache topology CPUID constants: */
 
@@ -700,6 +709,7 @@ static ObjectClass *x86_cpu_class_by_name(const char *cpu_model)
     ObjectClass *oc;
     char *typename;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (cpu_model == NULL) {
         return NULL;
     }
@@ -2349,6 +2359,7 @@ static void x86_cpu_load_def(X86CPU *cpu, X86CPUDefinition *def, Error **errp)
 
 X86CPU *cpu_x86_init(const char *cpu_model)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     return X86_CPU(cpu_generic_init(TYPE_X86_CPU, cpu_model));
 }
 
@@ -2797,6 +2808,7 @@ static void x86_cpu_reset(CPUState *s)
     uint64_t xcr0;
     int i;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     xcc->parent_reset(s);
 
     memset(env, 0, offsetof(CPUX86State, end_reset_fields));
@@ -3189,6 +3201,7 @@ static void x86_cpu_realizefn(DeviceState *dev, Error **errp)
     Error *local_err = NULL;
     static bool ht_warned;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     if (xcc->kvm_required && !kvm_enabled()) {
         char *name = x86_cpu_class_get_model_name(xcc);
         error_setg(&local_err, "CPU model '%s' requires KVM", name);
@@ -3379,6 +3392,7 @@ static void x86_cpu_unrealizefn(DeviceState *dev, Error **errp)
     X86CPUClass *xcc = X86_CPU_GET_CLASS(dev);
     Error *local_err = NULL;
 
+DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 #ifndef CONFIG_USER_ONLY
     cpu_remove_sync(CPU(dev));
     qemu_unregister_reset(x86_cpu_machine_reset_cb, dev);
@@ -3550,6 +3564,7 @@ static void x86_cpu_initfn(Object *obj)
     CPUX86State *env = &cpu->env;
     FeatureWord w;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     cs->env_ptr = env;
 
     object_property_add(obj, "family", "int",
@@ -3714,6 +3729,7 @@ static Property x86_cpu_properties[] = {
 
 static void x86_cpu_common_class_init(ObjectClass *oc, void *data)
 {
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     X86CPUClass *xcc = X86_CPU_CLASS(oc);
     CPUClass *cc = CPU_CLASS(oc);
     DeviceClass *dc = DEVICE_CLASS(oc);
@@ -3779,6 +3795,7 @@ static void x86_cpu_register_types(void)
 {
     int i;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     type_register_static(&x86_cpu_type_info);
     for (i = 0; i < ARRAY_SIZE(builtin_x86_defs); i++) {
         x86_register_cpudef_type(&builtin_x86_defs[i]);

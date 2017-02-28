@@ -687,6 +687,7 @@ static void runstate_init(void)
 {
     const RunStateTransition *p;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     memset(&runstate_valid_transitions, 0, sizeof(runstate_valid_transitions));
     for (p = &runstate_transitions_def[0]; p->from != RUN_STATE__MAX; p++) {
         runstate_valid_transitions[p->from][p->to] = true;
@@ -1441,6 +1442,7 @@ MachineState *current_machine;
 
 static MachineClass *find_machine(const char *name)
 {
+    DPRINTF("File: %s %s line=%d name=%s\n", __FILE__, __func__, __LINE__, name);
     GSList *el, *machines = object_class_get_list(TYPE_MACHINE, false);
     MachineClass *mc = NULL;
 
@@ -1880,7 +1882,7 @@ static void main_loop(void)
 #ifdef CONFIG_PROFILER
     int64_t ti;
 #endif
-    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
+    DPRINTF("File: %s %s enter do-while\n", __FILE__, __func__);
     do {
         nonblocking = tcg_enabled() && last_io > 0;
 #ifdef CONFIG_PROFILER
@@ -1891,6 +1893,7 @@ static void main_loop(void)
         dev_time += profile_getclock() - ti;
 #endif
     } while (!main_loop_should_exit());
+    DPRINTF("File: %s %s exit do-while\n", __FILE__, __func__);
 }
 
 static void version(void)
@@ -2597,6 +2600,7 @@ static gint machine_class_cmp(gconstpointer a, gconstpointer b)
  static MachineClass *machine_parse(const char *name)
 {
     MachineClass *mc = NULL;
+    DPRINTF("File: %s %s line=%d name=%s\n", __FILE__, __func__, __LINE__, name);
     GSList *el, *machines = object_class_get_list(TYPE_MACHINE, false);
 
     if (name) {
@@ -2726,6 +2730,7 @@ static MachineClass *select_machine(void)
     }
 
     loc_pop(&loc);
+    DPRINTF("File: %s %s line=%d name=%s\n", __FILE__, __func__, __LINE__, machine_class->name);
     return machine_class;
 }
 
@@ -2824,6 +2829,7 @@ static void set_memory_options(uint64_t *ram_slots, ram_addr_t *maxram_size,
     QemuOpts *opts = qemu_find_opts_singleton("memory");
     Location loc;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     loc_push_none(&loc);
     qemu_opts_loc_restore(opts);
 
@@ -4237,6 +4243,7 @@ int main(int argc, char **argv, char **envp)
         display_type = DT_NONE;
 #endif
     }
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     if ((no_frame || alt_grab || ctrl_grab) && display_type != DT_SDL) {
         error_report("-no-frame, -alt-grab and -ctrl-grab are only valid "
@@ -4486,8 +4493,10 @@ int main(int argc, char **argv, char **envp)
     current_machine->ram_slots = ram_slots;
     current_machine->boot_order = boot_order;
     current_machine->cpu_model = cpu_model;
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     machine_class->init(current_machine);
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
 
     realtime_init();
 

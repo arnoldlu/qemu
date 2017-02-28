@@ -36,6 +36,15 @@
 
 #include "qemu/compatfd.h"
 
+#define DEBUG_DEBUG
+
+#ifdef DEBUG_DEBUG
+#define DPRINTF(fmt, ...) \
+    do { fprintf(stderr, fmt, ## __VA_ARGS__); } while (0)
+#else
+#define DPRINTF(fmt, ...) \
+    do { } while (0)
+#endif
 /* If we have signalfd, we mask out the signals we want to handle and then
  * use signalfd to listen for them.  We rely on whatever the current signal
  * handler is to dispatch the signals when we receive them.
@@ -146,6 +155,7 @@ int qemu_init_main_loop(Error **errp)
     GSource *src;
     Error *local_error = NULL;
 
+    DPRINTF("File: %s %s line=%d\n", __FILE__, __func__, __LINE__);
     init_clocks();
 
     ret = qemu_signal_init();
